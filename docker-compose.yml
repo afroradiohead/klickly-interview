@@ -1,0 +1,32 @@
+version: '3.2'
+services:
+  app:
+    image: hitalos/laravel:latest
+    ports:
+      - 8000:80
+    expose:
+      - 80
+      - 8000
+    volumes:
+      - ./:/var/www
+    environment:
+      OWN_HOST: app
+      DB_HOST: db
+      DB_DATABASE: dbname
+      DB_USERNAME: username
+      DB_PASSWORD: p455w0rd
+      DB_PORT: 5432
+      DB_CONNECTION: pgsql
+      IS_DOCKER: 1
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: dbname
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: p455w0rd
+  selenium:
+    image: selenium/standalone-chrome
+    expose:
+      - 4444

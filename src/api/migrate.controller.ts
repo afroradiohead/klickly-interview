@@ -7,10 +7,10 @@ export class MigrateController {
     constructor(private readonly shopifyService: ShopifyService) {}
 
     @Post()
-    async store(@Body() body) {
+    async store(@Body() body: {storeName: string}) {
         const AccountModel = new Account().getModelForClass(Account);
 
-        const account = new AccountModel(this.shopifyService.findShopByName());
+        const account = new AccountModel(this.shopifyService.findShopByName(body.storeName));
         await account.save();
 
         return {

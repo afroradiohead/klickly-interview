@@ -28,13 +28,17 @@ describe('POST api/migrate', () => {
     });
 
     it(`should be able to call /POST api/migrate`, async () => {
-        return request(server)
+        const storeName = 'apple store';
+        const response = await request(server)
             .post('/api/migrate')
-            .send({ storeName: 'tobi' })
-            .expect(201)
-            .expect(async () => {
-                return await AccountModel.findOne();
-            });
+            .send({ storeName });
+
+        expect(response.statusCode).toBe(201);
+        expect(response.body).toEqual({
+            data: JSON.parse(JSON.stringify(await AccountModel.findOne({
+                name: storeName,
+            }))),
+        });
     });
 
     afterAll(async () => {

@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
+import {MigrateModule} from './api/migrate.module';
 
 @Module({
-  imports: [],
+  imports: [MigrateModule],
   controllers: [AppController],
   components: [],
 })

@@ -1,10 +1,15 @@
 import { prop, Typegoose, ModelType, InstanceType } from 'typegoose';
 import * as mongoose from 'mongoose';
 
-class User extends Typegoose {
-    @prop()
-    name?: string;
+mongoose.connect('mongodb://localhost:27017/test');
+
+export class Account extends Typegoose {
+    @prop({ required: true })
+    shopifyShopId: number;
 
     @prop({ required: true })
-    age: number;
+    name: string;
+
+    @prop({ required: true })
+    domain: string;
 }

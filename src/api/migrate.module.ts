@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MigrateController } from './migrate.controller';
-import { MigrateService } from './migrate.service';
+import {ShopifyService} from '../common/shopify.service';
 
 @Module({
     controllers: [MigrateController],
-    components: [MigrateService],
+    components: [ShopifyService],
 })
 export class MigrateModule {}

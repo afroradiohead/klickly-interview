@@ -1,11 +1,5 @@
 import {Component} from '@nestjs/common';
-import * as _ from 'lodash';
-
-export interface ShopifyShop {
-    shopifyShopId: number;
-    name: string;
-    domain: string;
-}
+import {AccountModel} from '../models/typegoose/account.model';
 
 @Component()
 export class ShopifyService {
@@ -20,5 +14,7 @@ export class ShopifyService {
 
     }
 
+    async a() {
 
+    }
 }

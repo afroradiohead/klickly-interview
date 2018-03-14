@@ -1,5 +1,6 @@
 # dependencies
 /node_modules
+/.env
 
 # IDE
 /.idea
@@ -19,5 +20,3 @@ npm-debug.log
 
 # dist
 /dist
-
-/.env

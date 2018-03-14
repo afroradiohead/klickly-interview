@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-mongoose.Promise = require('bluebird');
+require('dotenv').config();
 require('ts-node/register');
 require('./src/main');
 

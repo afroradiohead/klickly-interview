@@ -4,43 +4,40 @@ import * as querystring from 'querystring';
 import * as request from 'request-promise';
 import * as _ from 'lodash';
 
-const client_id = '525eef020db642e3cf017eb51c2a351a';
-const client_password = 'b90b1f2ec40e7d07853701de7175bc25';
-const scopes = 'read_content';
-const nonce = 'sdiofn13r4fr09vj4q';
-const redirect_uri = 'http://localhost:3000/api/migrate';
-
 export interface IShopResponsFromQueryDAO {
     code: string; hmac: string; shop: string; state: string; timestamp: string;
 }
 
 @Component()
 export class ShopifyService {
-    getOauthUrlByShopDomain(domain){
-        return `https://${domain}/admin/oauth/authorize?client_id=${client_id}&amp;scope=${scopes}&amp;redirect_uri=${redirect_uri}&amp;state=${nonce}&amp;`;
+    client_id = process.env.SHOPIFY_API_KEY;
+    client_password = process.env.SHOPIFY_API_SECRET;
+    redirect_uri = process.env.SHOPIFY_REDIRECT_URI;
+    scopes = 'read_content';
+    nonce = 'sdiofn13r4fr09vj4q';
 
+    getOauthUrlByShopDomain(domain){
+        const query = querystring.stringify({
+            client_id: this.client_id,
+            scope: this.scopes,
+            redirect_uri: this.redirect_uri,
+            state: this.nonce,
+        });
+        return `https://${domain}/admin/oauth/authorize?${query}`;
     }
 
     createHmacHash(query: IShopResponsFromQueryDAO){
-        const map = Object.assign({}, query);
-        delete map.hmac;
-        const message = querystring.stringify(map);
-        const generatedHash = crypto
-            .createHmac('sha256', client_password)
-            .update(message)
+        return crypto
+            .createHmac('sha256', this.client_password)
+            .update(querystring.stringify(_.omit(query, ['hmac'])))
             .digest('hex');
-
-        return generatedHash;
 
     }
 
     async getShopResponse(shop: string, accessToken: string){
-        const shopRequestUrl = 'https://' + shop + '/admin/shop.json';
-        const shopRequestHeaders = {
+        return JSON.parse(await request.get(`https://${shop}/admin/shop.json`, { headers: {
             'X-Shopify-Access-Token': accessToken,
-        };
-
-        return JSON.parse(await request.get(shopRequestUrl, { headers: shopRequestHeaders }));
+        }}));
     }
 
     async getShopResponseFromQuery(query: IShopResponsFromQueryDAO){
@@ -54,8 +51,8 @@ export class ShopifyService {
         const accessTokenRequestUrl = `https://${query.shop}/admin/oauth/access_token`;
         const accessTokenResponse = await request.post(accessTokenRequestUrl, {
             json: {
-                client_id,
-                client_secret: client_password,
+                client_id: this.client_id,
+                client_secret: this.client_password,
                 code: query.code,
             },
         });

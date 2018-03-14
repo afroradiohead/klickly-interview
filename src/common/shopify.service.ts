@@ -1,6 +1,7 @@
 import {Component} from '@nestjs/common';
 import * as crypto from 'crypto';
 import * as querystring from 'querystring';
+import * as request from 'request';
 
 const client_id = '525eef020db642e3cf017eb51c2a351a';
 const client_password = 'b90b1f2ec40e7d07853701de7175bc25';
@@ -42,5 +43,18 @@ export class ShopifyService {
         return 'https://' + shop + '/admin/oauth/access_token';
     }
 
+    async getShopResponse(shop: string, accessToken: string){
+        const shopRequestUrl = 'https://' + shop + '/admin/shop.json';
+        const shopRequestHeaders = {
+            'X-Shopify-Access-Token': accessToken,
+        };
 
+        return await request.get(shopRequestUrl, { headers: shopRequestHeaders });
+    }
+
+    async getShopResponseFromQuery(){
+        return await {
+            apple: true,
+        };
+    }
 }

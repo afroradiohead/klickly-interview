@@ -14,7 +14,13 @@ import {AccountSchema} from '../../../src/models/account/account.schema';
 describe('POST api/migrate', () => {
     let server;
     let app: INestApplication;
-    let shopifyService: ShopifyService;
+    const shopifyService = {
+        getShopResponseFromQuery : () => {
+            return {
+                apple: true,
+            };
+        },
+    };
     let accountModelService: AccountModelService;
 
     beforeAll(async () => {
@@ -25,6 +31,8 @@ describe('POST api/migrate', () => {
             imports: [ApplicationModule, MongooseModule.forFeature([{ name: 'Account', schema: AccountSchema }])],
             components: [ShopifyService, AccountModelService],
         })
+            .overrideComponent(ShopifyService)
+            .useValue(shopifyService)
             .compile();
 
         server = express();
@@ -32,20 +40,16 @@ describe('POST api/migrate', () => {
         await app.init();
 
         accountModelService = module.get<AccountModelService>(AccountModelService);
-        shopifyService = module.get<ShopifyService>(ShopifyService);
     });
 
-    it(`should return an account | if an account with name == storename exists`, async () => {
+    it(`should receive the shop response`, async () => {
         const storeName = 'apple-store';
 
-        await accountModelService.accountModel.create({shopifyShopId: 123, name: storeName, domain: 'adsfsafd'});
         const response = await request(server)
-            .post('/api/migrate')
+            .get('/api/migrate')
             .send({ storeName });
-        expect(response.statusCode).toBe(201);
-        expect(response.body).toEqual({
-            data: JSON.parse(JSON.stringify(await accountModelService.accountModel.findOne({name: storeName}))),
-        });
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual(JSON.parse(JSON.stringify(shopifyService.getShopResponseFromQuery())));
     });
 
     afterAll(async () => {

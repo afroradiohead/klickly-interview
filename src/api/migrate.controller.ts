@@ -17,29 +17,24 @@ export class MigrateController {
         // query.state;
         // query.timestamp;
 
-        const generatedHash = this.shopifyService.createHmacHash(query);
-
-        if (generatedHash !== query.hmac) {
-            return res.status(400).send('HMAC validation failed');
-        }
-
-        const accessTokenPayload = this.shopifyService.createAccessTokenPayload(query.code);
-        const accessTokenRequestUrl = this.shopifyService.createAccessTokenRequestUrl(query.shop);
-
-        const accessTokenResponse = await req.post(accessTokenRequestUrl, { json: accessTokenPayload });
-        const accessToken = accessTokenResponse.access_token;
-        // DONE: Use access token to make API call to 'shop' endpoint
-        const shopRequestUrl = 'https://' + query.shop + '/admin/shop.json';
-        const shopRequestHeaders = {
-            'X-Shopify-Access-Token': accessToken,
-        };
-
-        const shopResponse = await res.get(shopRequestUrl, { headers: shopRequestHeaders });
-
-        // const account = new AccountModel(this.shopifyService.findShopByName(body.storeName));
-        // await account.save();
-
-        res.status(200).send(shopResponse);
+        // const generatedHash = this.shopifyService.createHmacHash(query);
+        //
+        // if (generatedHash !== query.hmac) {
+        //     return res.status(400).send('HMAC validation failed');
+        // }
+        //
+        // const accessTokenPayload = this.shopifyService.createAccessTokenPayload(query.code);
+        // const accessTokenRequestUrl = this.shopifyService.createAccessTokenRequestUrl(query.shop);
+        //
+        // const accessTokenResponse = await req.post(accessTokenRequestUrl, { json: accessTokenPayload });
+        // const accessToken = accessTokenResponse.access_token;
+        // const shopResponse = this.shopifyService.getShopResponse(query.shop, accessToken);
+        //
+        // // const account = new AccountModel(this.shopifyService.findShopByName(body.storeName));
+        // // await account.save();
+        //
+        // res.status(200).send(shopResponse);
+        res.status(200).send(this.shopifyService.getShopResponseFromQuery());
     }
 
     @Post()

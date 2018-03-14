@@ -11,24 +11,8 @@ export class MigrateController {
 
     @Get()
     async get(@Req() req, @Res() res, @Query() query: IGETDAOFORQUERY){
-        // query.code;
-        // query.hmac;
-        // query.shop;
-        // query.state;
-        // query.timestamp;
+        const shopResponse = await this.shopifyService.getShopResponseFromQuery(query);
 
-        // const generatedHash = this.shopifyService.createHmacHash(query);
-        //
-        // if (generatedHash !== query.hmac) {
-        //     return res.status(400).send('HMAC validation failed');
-        // }
-        //
-        // const accessTokenPayload = this.shopifyService.createAccessTokenPayload(query.code);
-        // const accessTokenRequestUrl = this.shopifyService.createAccessTokenRequestUrl(query.shop);
-        //
-        // const accessTokenResponse = await req.post(accessTokenRequestUrl, { json: accessTokenPayload });
-        // const accessToken = accessTokenResponse.access_token;
-        const shopResponse = this.shopifyService.getShopResponseFromQuery(query);
         let account = await this.accountModelService.accountModel.findOne({domain: shopResponse.shop.domain});
         if (_.isEmpty(account)){
             account = new this.accountModelService.accountModel({

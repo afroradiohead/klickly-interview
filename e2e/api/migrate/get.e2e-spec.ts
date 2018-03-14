@@ -102,7 +102,6 @@ describe('GET api/migrate', () => {
             .get('/api/migrate')
             .query(query);
 
-
         const account = await accountModelService.accountModel.findOne({domain: shopResponse.shop.domain});
         expect(response.statusCode).toBe(200);
         expect(response.body).toEqual(JSON.parse(JSON.stringify(account)));

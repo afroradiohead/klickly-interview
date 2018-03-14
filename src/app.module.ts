@@ -4,7 +4,7 @@ import {MigrateModule} from './api/migrate.module';
 import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://localhost/test'), MigrateModule],
+  imports: [MongooseModule.forRoot(process.env.MONGODB_URI), MigrateModule],
   controllers: [AppController],
   components: [],
 })

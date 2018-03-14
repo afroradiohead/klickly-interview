@@ -4,7 +4,7 @@
   "description": "Nest TypeScript starter repository",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js",
+    "start": "./node_modules/.bin/forever index.js",
     "start:watch": "nodemon",
     "prestart:prod": "tsc",
     "start:prod": "node dist/main.js",
@@ -12,7 +12,8 @@
     "test:watch": "jest --watch --config=jest.json",
     "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage",
     "e2e": "jest --config=e2e/jest-e2e.json --forceExit",
-    "e2e:watch": "jest --watch --config=e2e/jest-e2e.json"
+    "e2e:watch": "jest --watch --config=e2e/jest-e2e.json",
+    "heroku-postbuild": "npm run prestart:prod"
   },
   "dependencies": {
     "@nestjs/common": "^4.6.6",
@@ -23,6 +24,7 @@
     "@nestjs/websockets": "^4.6.6",
     "bluebird": "^3.5.1",
     "dotenv": "^5.0.1",
+    "forever": "^0.15.3",
     "lodash": "^4.17.5",
     "mongoose": "^5.0.10",
     "redis": "^2.7.1",

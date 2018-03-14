@@ -9,6 +9,10 @@ const scopes = 'read_content';
 const nonce = 'sdiofn13r4fr09vj4q';
 const redirect_uri = 'http://localhost:3000/api/migrate';
 
+export interface IShopResponsFromQueryDAO {
+    code: string; hmac: string; shop: string; state: string; timestamp: string;
+}
+
 @Component()
 export class ShopifyService {
     getOauthUrlForStore(storeName){
@@ -52,9 +56,7 @@ export class ShopifyService {
         return await request.get(shopRequestUrl, { headers: shopRequestHeaders });
     }
 
-    async getShopResponseFromQuery(){
-        return await {
-            apple: true,
-        };
+    async getShopResponseFromQuery(query: IShopResponsFromQueryDAO){
+        return await query;
     }
 }

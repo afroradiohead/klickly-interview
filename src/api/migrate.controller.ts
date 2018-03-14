@@ -1,16 +1,16 @@
 import {Controller, Post, Body, Res, HttpStatus, Get, Param, Query, Req} from '@nestjs/common';
-import {ShopifyService} from '../common/shopify.service';
+import {IShopResponsFromQueryDAO, ShopifyService} from '../common/shopify.service';
 import * as _ from 'lodash';
 import {AccountModelService} from '../models/account/account.service';
-import * as querystring from 'querystring';
-import * as crypto from 'crypto';
+
+export interface IGETDAOFORQUERY extends IShopResponsFromQueryDAO {}
 
 @Controller('api/migrate')
 export class MigrateController {
     constructor(private readonly shopifyService: ShopifyService, private readonly accountModelService: AccountModelService) {}
 
     @Get()
-    async get(@Req() req, @Res() res, @Query() query: {code: string; hmac: string; shop: string; state: string; timestamp: number}){
+    async get(@Req() req, @Res() res, @Query() query: IGETDAOFORQUERY){
         // query.code;
         // query.hmac;
         // query.shop;
@@ -34,7 +34,7 @@ export class MigrateController {
         // // await account.save();
         //
         // res.status(200).send(shopResponse);
-        res.status(200).send(this.shopifyService.getShopResponseFromQuery());
+        res.status(200).send(this.shopifyService.getShopResponseFromQuery(query));
     }
 
     @Post()

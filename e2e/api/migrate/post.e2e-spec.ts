@@ -35,15 +35,15 @@ describe('POST api/migrate', () => {
     });
 
     it(`should return an account | if an account with name == storename exists`, async () => {
-        const storeName = 'apple-store';
-
-        await accountModelService.accountModel.create({shopifyShopId: 123, name: storeName, domain: 'adsfsafd'});
+        const storeName = 'apple store';
+        const domain = shopifyService.getDomainByStoreName(storeName);
+        await accountModelService.accountModel.create({domain});
         const response = await request(server)
             .post('/api/migrate')
             .send({ storeName });
         expect(response.statusCode).toBe(201);
         expect(response.body).toEqual({
-            data: JSON.parse(JSON.stringify(await accountModelService.accountModel.findOne({name: storeName}))),
+            data: JSON.parse(JSON.stringify(await accountModelService.accountModel.findOne({domain}))),
         });
     });
 
@@ -54,7 +54,7 @@ describe('POST api/migrate', () => {
             .send({ storeName });
 
         expect(response.statusCode).toBe(302);
-        expect(response.headers.location).toBe(shopifyService.getOauthUrlForStore(storeName));
+        expect(response.headers.location).toBe(shopifyService.getOauthUrlByShopDomain(shopifyService.getDomainByStoreName(storeName)));
     });
 
     afterAll(async () => {

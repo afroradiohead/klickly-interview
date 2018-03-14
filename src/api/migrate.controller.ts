@@ -28,21 +28,26 @@ export class MigrateController {
         //
         // const accessTokenResponse = await req.post(accessTokenRequestUrl, { json: accessTokenPayload });
         // const accessToken = accessTokenResponse.access_token;
-        // const shopResponse = this.shopifyService.getShopResponse(query.shop, accessToken);
-        //
-        // // const account = new AccountModel(this.shopifyService.findShopByName(body.storeName));
-        // // await account.save();
-        //
-        // res.status(200).send(shopResponse);
-        res.status(200).send(this.shopifyService.getShopResponseFromQuery(query));
+        const shopResponse = this.shopifyService.getShopResponseFromQuery(query);
+        let account = await this.accountModelService.accountModel.findOne({domain: shopResponse.shop.domain});
+        if (_.isEmpty(account)){
+            account = new this.accountModelService.accountModel({
+                domain: shopResponse.shop.domain,
+            });
+
+            await account.save();
+        }
+
+        res.status(200).send(JSON.parse(JSON.stringify(account)));
     }
 
     @Post()
     async store(@Res() res, @Body() body: {storeName: string}) {
-        const account = await this.accountModelService.accountModel.findOne({name: body.storeName});
+        const domain = this.shopifyService.getDomainByStoreName(body.storeName);
+        const account = await this.accountModelService.accountModel.findOne({domain});
 
         if (_.isEmpty(account)){
-            res.redirect(this.shopifyService.getOauthUrlForStore(body.storeName));
+            res.redirect(this.shopifyService.getOauthUrlByShopDomain(domain));
         }else{
             res.status(HttpStatus.CREATED).send({
                 data: account,

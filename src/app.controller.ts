@@ -17,7 +17,7 @@ export class AppController {
         const renderedAccountList = _.map(accountCollection, (account) => {
             return {
                 ...account,
-                createdAtAgo: moment(account.createdAt).fromNow(),
+                updatedAtAgo: moment(account.updatedAt).fromNow(),
                 storeExisistenceDate: moment(account.shopifyCreatedAt).format('MMMM Do YYYY, h:mm:ss a'),
             };
         });

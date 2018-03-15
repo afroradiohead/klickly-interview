@@ -20,16 +20,15 @@ export class MigrateController {
     async get(@Req() req, @Res() res, @Query() query: IGetQueryDAO){
         const shopResponse = await this.shopifyService.getShopResponseFromQuery(query);
 
-        let account = await this.accountModelService.accountModel.findOne({domain: shopResponse.shop.domain});
-        if (_.isEmpty(account)){
-            account = new this.accountModelService.accountModel({
-                domain: shopResponse.shop.domain,
-                shopifyCreatedAt: shopResponse.shop.created_at,
-                name: shopResponse.shop.name,
-            });
-
-            await account.save();
-        }
+        await this.accountModelService.accountModel.findOneAndUpdate({
+            domain: shopResponse.shop.domain,
+        }, {
+            domain: shopResponse.shop.domain,
+            shopifyCreatedAt: shopResponse.shop.created_at,
+            name: shopResponse.shop.name,
+        }, {
+            upsert: true,
+        });
 
         res.redirect('/');
     }

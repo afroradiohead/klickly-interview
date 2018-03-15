@@ -28,6 +28,7 @@
     "forever": "^0.15.3",
     "handlebars": "^4.0.11",
     "lodash": "^4.17.5",
+    "moment": "^2.21.0",
     "mongoose": "^5.0.10",
     "redis": "^2.7.1",
     "reflect-metadata": "^0.1.12",

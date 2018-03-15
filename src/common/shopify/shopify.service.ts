@@ -4,7 +4,7 @@ import * as querystring from 'querystring';
 import * as request from 'request-promise';
 import * as _ from 'lodash';
 
-export interface IShopResponsFromQueryDAO {
+export interface IQueryDAO {
     code: string; hmac: string; shop: string; state: string; timestamp: string;
 }
 
@@ -26,7 +26,7 @@ export class ShopifyService {
         return `https://${domain}/admin/oauth/authorize?${query}`;
     }
 
-    createHmacHash(query: IShopResponsFromQueryDAO){
+    createHmacHash(query: IQueryDAO){
         return crypto
             .createHmac('sha256', this.client_password)
             .update(querystring.stringify(_.omit(query, ['hmac'])))
@@ -40,12 +40,11 @@ export class ShopifyService {
         }}));
     }
 
-    async getShopResponseFromQuery(query: IShopResponsFromQueryDAO){
+    async getShopResponseFromQuery(query: IQueryDAO){
         const generatedHash = this.createHmacHash(query);
 
         if (generatedHash !== query.hmac) {
             throw new Error('HMAC validation failed');
-            // return res.status(400).send('HMAC validation failed');
         }
 
         const accessTokenRequestUrl = `https://${query.shop}/admin/oauth/access_token`;

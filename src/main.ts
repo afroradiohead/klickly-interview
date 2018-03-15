@@ -8,6 +8,6 @@ async function bootstrap() {
     app.engine('handlebars', exphbs());
     app.set('view engine', 'handlebars');
     app.set('views', path.join(__dirname, 'views'));
-    await app.listen(3000);
+    await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

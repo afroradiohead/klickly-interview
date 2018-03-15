@@ -1,3 +1,4 @@
+require('dotenv').config();
 import { NestFactory } from '@nestjs/core';
 import { ApplicationModule } from './app.module';
 import * as exphbs from 'express-handlebars';

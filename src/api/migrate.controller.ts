@@ -22,7 +22,8 @@ export class MigrateController {
             await account.save();
         }
 
-        res.status(200).send(JSON.parse(JSON.stringify(account)));
+        // res.status(200).send(JSON.parse(JSON.stringify(account)));
+        res.redirect('/');
     }
 
     @Post()

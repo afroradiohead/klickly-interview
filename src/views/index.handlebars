@@ -11,8 +11,7 @@
                     <ul class="nav nav-pills float-right">
                         <li class="nav-item">
                             <a class="nav-link" href="https://github.com/afroradiohead/klickly-interview" target="_blank">
-                                <i class="fa fa-github"></i>
-                                Github
+                                <i class="fa fa-github"></i> Github
                             </a>
                         </li>
                     </ul>
@@ -36,7 +35,7 @@
                                     </div>
                                 </form>
 
-                                <div class="text-muted text-center">Bring over your informations!!</div>
+                                <div class="text-muted text-center">Give me your store's data! ლ(´ڡ`ლ)</div>
                             </div>
                         </div>
 
@@ -44,8 +43,24 @@
 
                 </div>
             </div>
-        </div>
 
+            <div class="row">
+                <div class="col-12">
+                    <div class="list-group">
+                        {{#each accountCollection}}
+                            <div class="list-group-item list-group-item-action flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">List group item heading</h5>
+                                    <small>3 days ago</small>
+                                </div>
+                                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                <small>Donec id elit non mi porta.</small>
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

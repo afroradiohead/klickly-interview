@@ -15,7 +15,7 @@ describe('POST api/migrate', () => {
     let server;
     let app: INestApplication;
     const shopifyService = new ShopifyService();
-    let accountModelService:AccountModelService;
+    let accountModelService: AccountModelService;
 
     beforeAll(async () => {
         await mongoose.connect('mongodb://localhost:27017/test');

@@ -10,12 +10,17 @@ export interface IQueryDAO {
 
 @Component()
 export class ShopifyService {
-    client_id = process.env.SHOPIFY_API_KEY;
-    client_password = process.env.SHOPIFY_API_SECRET;
-    redirect_uri = process.env.SHOPIFY_REDIRECT_URI;
-    scopes = 'read_content';
-    nonce = 'sdiofn13r4fr09vj4q';
+    readonly client_id = process.env.SHOPIFY_API_KEY;
+    readonly client_password = process.env.SHOPIFY_API_SECRET;
+    readonly redirect_uri = process.env.SHOPIFY_REDIRECT_URI;
+    readonly scopes = 'read_content';
+    readonly nonce = 'sdiofn13r4fr09vj4q';
 
+    /**
+     *
+     * @param domain
+     * @returns {string}
+     */
     getOauthUrlByShopDomain(domain){
         const query = querystring.stringify({
             client_id: this.client_id,
@@ -26,6 +31,11 @@ export class ShopifyService {
         return `https://${domain}/admin/oauth/authorize?${query}`;
     }
 
+    /**
+     *
+     * @param {IQueryDAO} query
+     * @returns {string}
+     */
     createHmacHash(query: IQueryDAO){
         return crypto
             .createHmac('sha256', this.client_password)
@@ -34,12 +44,32 @@ export class ShopifyService {
 
     }
 
+    /**
+     *
+     * @param {string} storeName
+     * @returns {string}
+     */
+    getDomainByStoreName(storeName: string) {
+        return `${_.kebabCase(storeName)}.myshopify.com`;
+    }
+
+    /**
+     * @todo make request testable
+     * @param {string} shop
+     * @param {string} accessToken
+     * @returns {Promise<any>}
+     */
     async getShopResponse(shop: string, accessToken: string){
         return JSON.parse(await request.get(`https://${shop}/admin/shop.json`, { headers: {
             'X-Shopify-Access-Token': accessToken,
         }}));
     }
 
+    /**
+     * @todo make request testable
+     * @param {IQueryDAO} query
+     * @returns {Promise<any>}
+     */
     async getShopResponseFromQuery(query: IQueryDAO){
         const generatedHash = this.createHmacHash(query);
 
@@ -58,9 +88,5 @@ export class ShopifyService {
         const accessToken = accessTokenResponse.access_token;
 
         return await this.getShopResponse(query.shop, accessToken);
-    }
-
-    getDomainByStoreName(storeName: any) {
-        return `${_.snakeCase(storeName)}.myshopify.com`;
     }
 }

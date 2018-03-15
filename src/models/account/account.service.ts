@@ -7,8 +7,4 @@ import {Component} from '@nestjs/common';
 @Component()
 export class AccountModelService {
     constructor(@InjectModel(AccountSchema) public readonly accountModel: Model<IAccount>) {}
-
-    // async findByName(name: string): Promise<IAccount> {
-    //     return await this.accountModel.findOne({name: name});
-    // }
 }

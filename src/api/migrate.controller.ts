@@ -9,6 +9,13 @@ export interface IGetQueryDAO extends IQueryDAO {}
 export class MigrateController {
     constructor(private readonly shopifyService: ShopifyService, private readonly accountModelService: AccountModelService) {}
 
+    /**
+     *
+     * @param req
+     * @param res
+     * @param {IGetQueryDAO} query
+     * @returns {Promise<void>}
+     */
     @Get()
     async get(@Req() req, @Res() res, @Query() query: IGetQueryDAO){
         const shopResponse = await this.shopifyService.getShopResponseFromQuery(query);
@@ -27,6 +34,12 @@ export class MigrateController {
         res.redirect('/');
     }
 
+    /**
+     *
+     * @param res
+     * @param {{storeName: string}} body
+     * @returns {Promise<void>}
+     */
     @Post()
     async store(@Res() res, @Body() body: {storeName: string}) {
         const domain = this.shopifyService.getDomainByStoreName(body.storeName);

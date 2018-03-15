@@ -7,7 +7,10 @@ import * as _ from 'lodash';
 export class AppController {
     constructor(private readonly accountModelService: AccountModelService) {}
 
-
+    /**
+     * @param res
+     * @returns {Promise<void>}
+     */
     @Get()
 	async index(@Res() res) {
         const accountCollection = await this.accountModelService.accountModel.find().lean();
